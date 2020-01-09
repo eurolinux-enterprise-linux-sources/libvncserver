@@ -28,11 +28,20 @@ Patch50:  libvncserver-LINUX.patch
 ## upstream patches
 Patch100: libvncserver-0.9.1-close_server_socket.patch
 
-# Fix CVE-2014-6051, bug #1184538
+# Fix CVE-2014-6051, bug #1157668
 Patch101: LibVNCServer-0.9.10-CVE-2014-6051.patch
 
-# Fix CVE-2014-6055, bug #1184538
-Patch102: LibVNCServer-0.9.10-CVE-2014-6055.patch
+# Fix CVE-2014-6052, bug #1157668
+Patch102: LibVNCServer-0.9.7-CVE-2014-6052.patch
+
+# Fix CVE-2014-6053, bug #1157668
+Patch103: LibVNCServer-0.9.10-CVE-2014-6053.patch
+
+# Fix CVE-2014-6054, bug #1157668
+Patch104: LibVNCServer-0.9.10-CVE-2014-6054.patch
+
+# Fix CVE-2014-6055, bug #1157668
+Patch105: LibVNCServer-0.9.10-CVE-2014-6055.patch
 
 # upstream name
 Obsoletes: LibVNCServer < 0.9.1
@@ -76,6 +85,9 @@ find . -name minilzo\* -exec rm -f {} \;
 %patch100 -p1 -b .close_server_socket
 %patch101 -p1
 %patch102 -p1
+%patch103 -p1
+%patch104 -p1
+%patch105 -p1
 
 # fix encoding
 mv AUTHORS AUTHORS.OLD && \
@@ -132,10 +144,16 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Fri Jan 23 2015 Petr Pisar <ppisar@redhat.com> - 0.9.7-7.1
-- Fix CVE-2014-6051 (integer overflow in screen size handling) (bug #1184538)
+* Fri Oct 31 2014 Petr Pisar <ppisar@redhat.com> - 0.9.7-7.1
+- Fix CVE-2014-6051 (integer overflow in screen size handling) (bug #1157668)
+- Fix CVE-2014-6052 (NULL pointer dereference in framebuffer setup)
+  (bug #1157668)
+- Fix CVE-2014-6053 (NULL pointer dereference in ClientCutText message
+  handling) (bug #1157668)
+- Fix CVE-2014-6054 (server divide-by-zero in scaling factor handling)
+  (bug #1157668)
 - Fix CVE-2014-6055 (server stacked-based buffer overflow in file transfer
-  handling) (bug #1184538)
+  handling) (bug #1157668)
 
 * Fri May 06 2011 Petr Pisar <ppisar@redhat.com> - 0.9.7-7
 - Revert CVE-2011-0904 and CVE-2011-0905 patch because libvncserver is not
