@@ -8,7 +8,7 @@
 Summary: Library to make writing a vnc server easy
 Name:    libvncserver
 Version: 0.9.7
-Release: 4%{?dist}
+Release: 7%{?dist}.1
 # NOTE: --with-tightvnc-filetransfer => GPLv2
 License: GPLv2+
 Group:   System Environment/Libraries
@@ -27,6 +27,12 @@ Patch50:  libvncserver-LINUX.patch
 
 ## upstream patches
 Patch100: libvncserver-0.9.1-close_server_socket.patch
+
+# Fix CVE-2014-6051, bug #1184538
+Patch101: LibVNCServer-0.9.10-CVE-2014-6051.patch
+
+# Fix CVE-2014-6055, bug #1184538
+Patch102: LibVNCServer-0.9.10-CVE-2014-6055.patch
 
 # upstream name
 Obsoletes: LibVNCServer < 0.9.1
@@ -68,6 +74,8 @@ find . -name minilzo\* -exec rm -f {} \;
 %patch2 -p1 -b .multilib
 %patch50 -p0 -b .LINUX
 %patch100 -p1 -b .close_server_socket
+%patch101 -p1
+%patch102 -p1
 
 # fix encoding
 mv AUTHORS AUTHORS.OLD && \
@@ -124,6 +132,22 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Jan 23 2015 Petr Pisar <ppisar@redhat.com> - 0.9.7-7.1
+- Fix CVE-2014-6051 (integer overflow in screen size handling) (bug #1184538)
+- Fix CVE-2014-6055 (server stacked-based buffer overflow in file transfer
+  handling) (bug #1184538)
+
+* Fri May 06 2011 Petr Pisar <ppisar@redhat.com> - 0.9.7-7
+- Revert CVE-2011-0904 and CVE-2011-0905 patch because libvncserver is not
+  vulnerable (bug #696767)
+
+* Wed Apr 27 2011 Petr Pisar <ppisar@redhat.com> - 0.9.7-6
+- Fix CVE-2011-0904 and CVE-2011-0905 in more generic way (bug #696767)
+
+* Wed Apr 20 2011 Petr Pisar <ppisar@redhat.com> - 0.9.7-5
+- Fix CVE-2011-0904 (bug #696767)
+- Fix CVE-2011-0905 (bug #696767)
+
 * Thu Feb 18 2010 Stepan Kasal <skasal@redhat.com> - 0.9.7-4
 - repack the tarball, there are .jar files without any source
 - do not BR findutils, they are guaranteed in Fedora mock
