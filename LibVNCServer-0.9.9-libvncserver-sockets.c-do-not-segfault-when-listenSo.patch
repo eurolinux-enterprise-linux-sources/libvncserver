@@ -1,0 +1,33 @@
+From 66282f58000c8863e104666c30cb67b1d5cbdee3 Mon Sep 17 00:00:00 2001
+From: "Kyle J. McKay" <mackyle@gmail.com>
+Date: Fri, 18 May 2012 00:30:11 -0700
+Subject: [PATCH] libvncserver/sockets.c: do not segfault when
+ listenSock/listen6Sock == -1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ libvncserver/sockets.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libvncserver/sockets.c b/libvncserver/sockets.c
+index 84c9c98..3ff2aac 100644
+--- a/libvncserver/sockets.c
++++ b/libvncserver/sockets.c
+@@ -402,9 +402,9 @@ rfbProcessNewConnection(rfbScreenInfoPtr rfbScreen)
+       rfbLogPerror("rfbProcessNewConnection: error in select");
+       return FALSE;
+     }
+-    if (FD_ISSET(rfbScreen->listenSock, &listen_fds)) 
++    if (rfbScreen->listenSock >= 0 && FD_ISSET(rfbScreen->listenSock, &listen_fds))
+       chosen_listen_sock = rfbScreen->listenSock;
+-    if (FD_ISSET(rfbScreen->listen6Sock, &listen_fds)) 
++    if (rfbScreen->listen6Sock >= 0 && FD_ISSET(rfbScreen->listen6Sock, &listen_fds))
+       chosen_listen_sock = rfbScreen->listen6Sock;
+ 
+     if ((sock = accept(chosen_listen_sock,
+-- 
+2.13.5
+
