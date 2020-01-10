@@ -6,7 +6,7 @@
 Summary: Library to make writing a vnc server easy
 Name:    libvncserver
 Version: 0.9.9
-Release: 12%{?dist}
+Release: 13%{?dist}
 # NOTE: --with-tightvnc-filetransfer => GPLv2
 License: GPLv2+
 Group:   System Environment/Libraries
@@ -35,10 +35,17 @@ Patch8: LibVNCServer-0.9.10-CVE-2014-6055.patch
 # after 0.9.9,
 # <https://sourceforge.net/p/libvncserver/mailman/message/29358128/>
 Patch9: LibVNCServer-0.9.9-libvncserver-sockets.c-do-not-segfault-when-listenSo.patch
-# 1/2 Fix CVE-2018-7225, bug #1548440
+# 1/2 Fix CVE-2018-7225, bug #1548441
 Patch10:    libvncserver-0.9.11-Validate-client-cut-text-length.patch
-# 2/2 Fix CVE-2018-7225, bug #1548440
+# 2/2 Fix CVE-2018-7225, bug #1548441
 Patch11:    libvncserver-0.9.11-Limit-client-cut-text-length-to-1-MB.patch
+# Fix CVE-2018-15127 (Heap out-of-bounds write in
+# rfbserver.c:rfbProcessFileTransferReadBuffer()), bug #1662995, upstream bugs
+# <https://github.com/LibVNC/libvncserver/issues/243>
+# <https://github.com/LibVNC/libvncserver/issues/273>
+# <https://github.com/LibVNC/libvncserver/issues/276>
+# fixed in upstream after 0.9.12
+Patch12:    libvncserver-0.9.11-Fix-CVE-2018-15127-Heap-out-of-bounds-write-in-rfbse.patch
 
 # upstream name
 Obsoletes: LibVNCServer < 0.9.1
@@ -93,6 +100,7 @@ rm -f common/lzodefs.h common/lzoconf.h commmon/minilzo.h common/minilzo.c
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 # fix encoding
 for file in AUTHORS ChangeLog ; do
@@ -161,8 +169,12 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Jan 10 2019 Petr Pisar <ppisar@redhat.com> - 0.9.9-13
+- Fix CVE-2018-15127 (Heap out-of-bounds write in
+  rfbserver.c:rfbProcessFileTransferReadBuffer()) (bug #1662995)
+
 * Mon Feb 26 2018 Petr Pisar <ppisar@redhat.com> - 0.9.9-12
-- Fix CVE-2018-7225 (improper client cut text length sanitization) (bug #1548440)
+- Fix CVE-2018-7225 (improper client cut text length sanitization) (bug #1548441)
 
 * Fri Sep 15 2017 Petr Pisar <ppisar@redhat.com> - 0.9.9-11
 - Fix a crash in the VNC server library on connecting an IPv4 client if the
