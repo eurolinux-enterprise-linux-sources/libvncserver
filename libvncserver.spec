@@ -6,7 +6,7 @@
 Summary: Library to make writing a vnc server easy
 Name:    libvncserver
 Version: 0.9.9
-Release: 11%{?dist}
+Release: 12%{?dist}
 # NOTE: --with-tightvnc-filetransfer => GPLv2
 License: GPLv2+
 Group:   System Environment/Libraries
@@ -35,6 +35,10 @@ Patch8: LibVNCServer-0.9.10-CVE-2014-6055.patch
 # after 0.9.9,
 # <https://sourceforge.net/p/libvncserver/mailman/message/29358128/>
 Patch9: LibVNCServer-0.9.9-libvncserver-sockets.c-do-not-segfault-when-listenSo.patch
+# 1/2 Fix CVE-2018-7225, bug #1548440
+Patch10:    libvncserver-0.9.11-Validate-client-cut-text-length.patch
+# 2/2 Fix CVE-2018-7225, bug #1548440
+Patch11:    libvncserver-0.9.11-Limit-client-cut-text-length-to-1-MB.patch
 
 # upstream name
 Obsoletes: LibVNCServer < 0.9.1
@@ -87,6 +91,8 @@ rm -f common/lzodefs.h common/lzoconf.h commmon/minilzo.h common/minilzo.c
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
+%patch11 -p1
 
 # fix encoding
 for file in AUTHORS ChangeLog ; do
@@ -155,6 +161,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Feb 26 2018 Petr Pisar <ppisar@redhat.com> - 0.9.9-12
+- Fix CVE-2018-7225 (improper client cut text length sanitization) (bug #1548440)
+
 * Fri Sep 15 2017 Petr Pisar <ppisar@redhat.com> - 0.9.9-11
 - Fix a crash in the VNC server library on connecting an IPv4 client if the
   server could not start listening on an IPv6 socket (bug #1314814)
