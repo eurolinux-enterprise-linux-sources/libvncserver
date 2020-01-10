@@ -6,7 +6,7 @@
 Summary: Library to make writing a vnc server easy
 Name:    libvncserver
 Version: 0.9.9
-Release: 9%{?dist}
+Release: 9%{?dist}.1
 # NOTE: --with-tightvnc-filetransfer => GPLv2
 License: GPLv2+
 Group:   System Environment/Libraries
@@ -20,6 +20,16 @@ Patch1: LibVNCServer-0.9.9-system_minilzo.patch
 Patch2: libvncserver-0.9.1-multilib.patch
 # pkgconfig love (upstreamable)
 Patch3: LibVNCServer-0.9.9-pkgconfig.patch
+# Fix CVE-2014-6051, bug #1157670
+Patch4: LibVNCServer-0.9.10-CVE-2014-6051.patch
+# Fix CVE-2014-6052, bug #1157670
+Patch5: LibVNCServer-0.9.9-CVE-2014-6052.patch
+# Fix CVE-2014-6053, bug #1157670
+Patch6: LibVNCServer-0.9.10-CVE-2014-6053.patch
+# Fix CVE-2014-6054, bug #1157670
+Patch7: LibVNCServer-0.9.10-CVE-2014-6054.patch
+# Fix CVE-2014-6055, bug #1157670
+Patch8: LibVNCServer-0.9.10-CVE-2014-6055.patch
 
 # upstream name
 Obsoletes: LibVNCServer < 0.9.1
@@ -66,6 +76,11 @@ rm -f common/lzodefs.h common/lzoconf.h commmon/minilzo.h common/minilzo.c
 %endif
 %patch2 -p1 -b .multilib
 %patch3 -p1 -b .pkgconfig
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 # fix encoding
 for file in AUTHORS ChangeLog ; do
@@ -134,6 +149,17 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Oct 31 2014 Petr Pisar <ppisar@redhat.com> - 0.9.9-9.1
+- Fix CVE-2014-6051 (integer overflow in screen size handling) (bug #1157670)
+- Fix CVE-2014-6052 (NULL pointer dereference in framebuffer setup)
+  (bug #1157670)
+- Fix CVE-2014-6053 (NULL pointer dereference in ClientCutText message
+  handling) (bug #1157670)
+- Fix CVE-2014-6054 (server divide-by-zero in scaling factor handling)
+  (bug #1157670)
+- Fix CVE-2014-6055 (server stacked-based buffer overflow in file transfer
+  handling) (bug #1157670)
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.9.9-9
 - Mass rebuild 2014-01-24
 
